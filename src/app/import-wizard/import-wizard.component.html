@@ -1,0 +1,90 @@
+<div class="container">
+  <div class="container-fluid">
+    <h4
+      style="max-height: 50px !important; margin-top: 30px;margin-bottom: 30px; color: blue"
+    >
+      Import Wizard
+    </h4>
+    <form [formGroup]="formData">
+      <table
+        mat-table
+        [dataSource]="dataModel"
+        class="mat-elevation-z4"
+        style="width: 100%"
+      >
+        <div>
+          <ng-container matColumnDef="mapped">
+            <th width="150px" mat-header-cell *matHeaderCellDef>Mapped</th>
+            <td width="150px" mat-cell *matCellDef="let xl">
+              <div *ngIf="xl.selected == true">
+                <mat-checkbox checked="true"> </mat-checkbox>
+              </div>
+            </td>
+          </ng-container>
+        </div>
+
+        <div>
+          <ng-container matColumnDef="columnNames" [formGroup]="formData">
+            <th width="150px" mat-header-cell *matHeaderCellDef>
+              Column Names
+            </th>
+            <td width="150px" mat-cell *matCellDef="let xl">
+              <input type="hidden" [value]="xl.propertiesName" />{{
+                xl.propertiesName
+              }}
+            </td>
+          </ng-container>
+        </div>
+
+        <div>
+          <ng-container matColumnDef="columnValues">
+            <th width="600px" mat-header-cell *matHeaderCellDef>
+              Column Values
+            </th>
+            <td width="600px" mat-cell *matCellDef="let xl">
+              {{ xl.propertiesValue }}
+            </td>
+          </ng-container>
+        </div>
+
+        <div>
+          <ng-container matColumnDef="columnNameDB">
+            <th width="150px" mat-header-cell *matHeaderCellDef>
+              Column Names from Database
+            </th>
+            <td
+              width="150px"
+              mat-cell
+              *matCellDef="let xl;  let i = index"
+              [formGroup]="formData"
+            >
+              <mat-select
+                #select
+                [(value)]="xl.selectedValue"
+                (selectionChange)="
+                  pushValuesToArray(xl.propertiesId, select.value, xl.pickList,i)
+                "
+              >
+                <mat-option *ngFor="let item of xl.pickList" [value]="item.id" [disabled]="item.selected">
+                  {{ item.value }}
+                </mat-option>
+              </mat-select>
+            </td>
+          </ng-container>
+        </div>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      </table>
+      <div align="right">
+        <button
+          #f
+          mat-raised-button
+          style="width: 100px; height: 50px; margin-top: 20px "
+          (click)="onSubmit()"
+        >
+          Next
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
